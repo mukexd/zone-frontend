@@ -5,11 +5,20 @@ export default function ReflectionZone() {
   const navigate = useNavigate();
 
   const [photo, setPhoto] = useState(null);
-  const [speaking, setSpeaking] = useState(false);
+  const [talking, setTalking] = useState(false);
+
+  const [noteText, setNoteText] = useState("");
+  const [notesEnabled, setNotesEnabled] = useState(false);
 
   useEffect(() => {
     const savedPhoto = localStorage.getItem("reflection-photo");
     if (savedPhoto) setPhoto(savedPhoto);
+
+    const savedNotes = localStorage.getItem("reflection-notes");
+    if (savedNotes) {
+      setNoteText(savedNotes);
+      setNotesEnabled(true);
+    }
   }, []);
 
   const handleUpload = (e) => {
@@ -24,6 +33,32 @@ export default function ReflectionZone() {
     reader.readAsDataURL(file);
   };
 
+  const handleDeletePhoto = () => {
+    setPhoto(null);
+    setTalking(false);
+    localStorage.removeItem("reflection-photo");
+  };
+
+  const handleTalkClick = () => {
+    setTalking((prev) => !prev);
+  };
+
+  const handleThoughtsClick = () => {
+    setNotesEnabled(true);
+  };
+
+  const handleDeleteNotes = () => {
+    setNoteText("");
+    setNotesEnabled(false);
+    localStorage.removeItem("reflection-notes");
+  };
+
+  const handleNoteChange = (e) => {
+    const value = e.target.value;
+    setNoteText(value);
+    localStorage.setItem("reflection-notes", value);
+  };
+
   return (
     <div className="page">
       <button className="back-button" onClick={() => navigate("/")}>
@@ -32,34 +67,90 @@ export default function ReflectionZone() {
 
       <h1>Reflection Zone</h1>
 
-      {!photo && (
-        <div className="upload-section">
-          <p>Upload a photo to reflect with:</p>
-          <input type="file" accept="image/*" onChange={handleUpload} />
-        </div>
-      )}
+      <div className="reflection-grid">
+        {/* LEFT BOX – IMAGE */}
+        <div className="reflection-box">
+          <div className="reflection-box-inner">
+            {!photo && (
+              <label className="reflection-upload-label">
+                <span className="reflection-upload-text">Upload image</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleUpload}
+                  className="reflection-upload-input"
+                />
+              </label>
+            )}
 
-      {photo && (
-        <div className="photo-section">
-          <img src={photo} alt="Reflection" className="reflection-photo" />
-          <div className="toggle-buttons">
+            {photo && (
+              <img
+                src={photo}
+                alt="Reflection"
+                className="reflection-photo-box"
+              />
+            )}
+
+            {talking && (
+              <div className="reflection-wave">
+                <span className="bar bar1" />
+                <span className="bar bar2" />
+                <span className="bar bar3" />
+              </div>
+            )}
+          </div>
+
+          <div className="reflection-buttons-row">
             <button
-              onClick={() => setSpeaking(true)}
-              disabled={speaking}
+              className={`reflection-btn left ${
+                talking ? "active" : ""
+              }`}
+              onClick={handleTalkClick}
+              disabled={!photo}
             >
-              Click to Speak
+              {talking ? "▌▌" : "Talk"}
             </button>
             <button
-              onClick={() => setSpeaking(false)}
-              disabled={!speaking}
+              className="reflection-btn right"
+              onClick={handleDeletePhoto}
+              disabled={!photo}
             >
-              Click to Pause
+              Thank you
             </button>
           </div>
         </div>
-      )}
 
-      {speaking && <p className="speaking-text">🎙️ Speaking... reflect your thoughts</p>}
+        {/* RIGHT BOX – NOTES */}
+        <div className="reflection-box">
+          <div className="reflection-box-inner">
+            <textarea
+              className="reflection-notes"
+              placeholder="Write your thoughts here..."
+              value={noteText}
+              onChange={handleNoteChange}
+              readOnly={!notesEnabled}
+            />
+          </div>
+
+          <div className="reflection-buttons-row">
+            <button
+              className={`reflection-btn left ${
+                notesEnabled ? "active" : ""
+              }`}
+              onClick={handleThoughtsClick}
+            >
+              Thoughts
+            </button>
+            <button
+              className="reflection-btn right"
+              onClick={handleDeleteNotes}
+              disabled={!noteText}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

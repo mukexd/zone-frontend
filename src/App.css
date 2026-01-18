@@ -124,6 +124,7 @@ body {
   margin-bottom: 20px;
 }
 
+
 .back-button:hover {
   background-color: #e6e6d6;
 }
@@ -182,7 +183,7 @@ body {
   display: flex;
   flex-direction: column;
   font-size: 14px;
-  color: #gold; /* adjust if needed */
+  color: #f5f5dc; /* adjust if needed */
 }
 
 .goal-form input,
@@ -274,4 +275,238 @@ body {
 .header .nav a:hover {
   opacity: 0.8;
   transform: scale(1.05);
+}
+
+/* Container for the row of boxes */
+.future-goal-boxes-row {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* center whole group */
+  align-items: flex-start;
+  gap: 1.5rem;               /* space between boxes */
+  /* Ensure this sits clearly between form and footer */
+  width: 100%;
+}
+
+/* Individual square-ish box */
+.future-goal-box {
+  box-sizing: border-box;
+  width: 200px;              /* adjust to fit your layout */
+  height: 200px;             /* same as width for square */
+  border-radius: 12px;
+  border: 2px solid #ccc;    /* or your theme color */
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background-color: #f5f5dc; /* or theme background */
+  /* Optional: subtle shadow */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Text inside the box */
+.future-goal-box-note {
+  font-weight: 600;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  color: rgb(0, 0, 0); /* emerald-500 style green */
+}
+
+.future-goal-box-days {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+/* Delete button style to look consistent with your UI */
+.future-goal-delete-button {
+  margin-top: 0.75rem;
+  align-self: flex-start;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #d33;
+  background-color: #fff;
+  color: #d33;
+  cursor: pointer;
+}
+
+.future-goal-delete-button:hover {
+  background-color: #d33;
+  color: #fff;
+}
+
+/* Reflection Zone layout */
+.reflection-grid {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.reflection-box {
+  flex: 1 1 320px;
+  max-width: 600px;
+  background-color: #f5f5dc; /* white-gold */
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.reflection-box-inner {
+  flex: 1;
+  border-radius: 12px;
+  background-color: #fdfdf3;
+  border: 1px solid #e0e0c0;
+  padding: 12px; /* keep this, box itself is aligned */
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Upload area */
+.reflection-upload-label {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  border: 2px dashed #00755e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #00755e;
+  font-weight: bold;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.reflection-upload-input {
+  display: none;
+}
+
+.reflection-upload-label:hover {
+  background-color: #f0f0dd;
+  transform: scale(1.01);
+}
+
+/* Photo inside box */
+.reflection-photo-box {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+/* Buttons row under each box */
+.reflection-buttons-row {
+  margin-top: 12px;
+  display: flex;
+  width: 100%;
+}
+
+.reflection-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  background-color: #f5f5dc;
+  color: #00755e;
+  transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+}
+
+.reflection-btn.left {
+  border-radius: 12px 0 0 12px;
+}
+
+.reflection-btn.right {
+  border-radius: 0 12px 12px 0;
+}
+
+.reflection-btn:hover:not(:disabled) {
+  background-color: #e6e6d6;
+  transform: translateY(-1px);
+}
+
+.reflection-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reflection-btn.active {
+  background-color: #00755e;
+  color: #f5f5dc;
+}
+
+/* Notes area */
+.reflection-notes {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  border-radius: 10px;
+  border: 0px solid #00755e;
+  padding: 8px 10px; /* slightly smaller top padding helps alignment */
+  font-size: 14px;
+  line-height: 24px; /* EXACTLY same as background-size height below */
+  resize: none;
+  background-color: #ffffff;
+  color: #000000;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 23px,
+    rgba(0, 0, 0, 0.06) 24px
+  );
+  background-size: 100% 24px; /* same as line-height */
+}
+
+
+.reflection-notes[readonly] {
+  background-color: #fdfdf3;
+  cursor: default;
+}
+
+/* Simple animated bars for "talking" */
+.reflection-wave {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  display: flex;
+  gap: 4px;
+}
+
+.reflection-wave .bar {
+  width: 4px;
+  border-radius: 2px;
+  background-color: #00755e;
+  animation: reflection-wave 0.9s infinite ease-in-out;
+}
+
+.bar1 {
+  height: 14px;
+  animation-delay: 0s;
+}
+.bar2 {
+  height: 20px;
+  animation-delay: 0.15s;
+}
+.bar3 {
+  height: 10px;
+  animation-delay: 0.3s;
+}
+
+@keyframes reflection-wave {
+  0%,
+  100% {
+    transform: scaleY(0.6);
+  }
+  50% {
+    transform: scaleY(1.3);
+  }
 }
