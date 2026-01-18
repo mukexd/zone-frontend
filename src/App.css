@@ -510,3 +510,65 @@ body {
     transform: scaleY(1.3);
   }
 }
+
+/* Ensure the row is a full card */
+.todayzone-row {
+  display: flex;
+  align-items: stretch;
+  background-color: #f5f5dc; /* white-gold */
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+/* Text area fills middle, control panel on the right */
+.todayzone-row-textarea {
+  flex: 1;
+  border: none;
+  border-top: none;
+  border-bottom: none;
+  padding: 8px;
+  font-size: 14px;
+  resize: none;
+}
+
+/* Right-side panel for buttons */
+.hour-actions {
+  flex: 0 0 140px;
+  display: flex;
+  flex-direction: row;
+  border-left: 1px solid #e2e8f0;       /* vertical border between text and buttons */
+  background: #f8fafc;
+}
+
+/* Buttons look like boxed controls */
+.hour-btn {
+  flex: 1;
+  border: none;
+  padding: 8px 6px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Save/Edit button */
+.hour-btn-save {
+  background: #10b981;
+  color: #ffffff;
+}
+
+/* Delete button */
+.hour-btn-delete {
+  background: #515050;
+  color: #ffffff;
+}
+
+/* Optional hover states */
+.hour-btn-save:hover {
+  background: #00755e;
+}
+
+.hour-btn-delete:hover{
+  background: #ad0a0a;
+}
