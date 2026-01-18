@@ -1,33 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function FutureGoal() {
   const navigate = useNavigate();
 
   const [goal, setGoal] = useState({ date: "", note: "" });
-  const [remainingDays, setRemainingDays] = useState(null);
-
-  // Load goal from localStorage
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("future-goal")) || null;
-    if (saved) {
-      setGoal(saved);
-      calculateRemainingDays(saved.date);
-    }
-  }, []);
+  const [goals, setGoals] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem("future-goals")) || [];
+    return saved;
+  });
+  const [isSaved, setIsSaved] = useState(false);
 
   const calculateRemainingDays = (dateStr) => {
-    if (!dateStr) return;
+    if (!dateStr) return 0;
     const today = new Date();
     const target = new Date(dateStr);
+    today.setHours(0, 0, 0, 0);
+    target.setHours(0, 0, 0, 0);
     const diff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-    setRemainingDays(diff >= 0 ? diff : 0);
+    return diff >= 0 ? diff : 0;
   };
 
   const handleDateChange = (e) => {
     const newDate = e.target.value;
     setGoal((prev) => ({ ...prev, date: newDate }));
-    calculateRemainingDays(newDate);
   };
 
   const handleNoteChange = (e) => {
@@ -36,8 +32,33 @@ export default function FutureGoal() {
   };
 
   const handleSave = () => {
-    localStorage.setItem("future-goal", JSON.stringify(goal));
-    alert("Goal saved!");
+    if (!goal.date || !goal.note.trim()) {
+      return;
+    }
+
+    const newGoal = {
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+      date: goal.date,
+      note: goal.note.trim(),
+      daysLeft: calculateRemainingDays(goal.date),
+    };
+
+    const updatedGoals = [...goals, newGoal];
+    setGoals(updatedGoals);
+    localStorage.setItem("future-goals", JSON.stringify(updatedGoals));
+
+    // reset inputs
+    setGoal({ date: "", note: "" });
+
+    // button feedback
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 2000);
+  };
+
+  const handleDelete = (id) => {
+    const updatedGoals = goals.filter((g) => g.id !== id);
+    setGoals(updatedGoals);
+    localStorage.setItem("future-goals", JSON.stringify(updatedGoals));
   };
 
   return (
@@ -46,11 +67,9 @@ export default function FutureGoal() {
         ← Back
       </button>
 
-      <h1>CREATE FUTURE GOAL</h1>
+      <h1>CREATE YOUR FUTURE GOAL</h1>
 
-      {remainingDays !== null && (
-        <p>Next goal in <strong>{remainingDays}</strong> day(s)</p>
-      )}
+      {/* Removed "Next goal in X days" from top */}
 
       <div className="goal-form">
         <label>
@@ -76,9 +95,29 @@ export default function FutureGoal() {
         </label>
 
         <button className="save-button" onClick={handleSave}>
-          Save Goal
+          {isSaved ? "Saved Successfully" : "Save Goal"}
         </button>
       </div>
+
+      {/* Boxes between Save button and footer */}
+      {goals.length > 0 && (
+        <div className="future-goal-boxes-row">
+          {goals.map((g) => (
+            <div key={g.id} className="future-goal-box">
+              <div className="future-goal-box-note">{g.note}</div>
+              <div className="future-goal-box-days">
+                {g.daysLeft} day{g.daysLeft === 1 ? "" : "s"} left
+              </div>
+              <button
+                className="future-goal-delete-button"
+                onClick={() => handleDelete(g.id)}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
