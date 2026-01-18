@@ -1,8 +1,9 @@
 .auth-page {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* left-align children */
   margin-top: 40px;
+  padding-left: 40px;      /* match header left padding */
 }
 
 .auth-page h1 {

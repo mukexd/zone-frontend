@@ -122,7 +122,11 @@ body {
   cursor: pointer;
   font-weight: bold;
   margin-bottom: 20px;
+
+  /* Align with header's left padding (40px) */
+  margin-left: 0px;
 }
+
 
 
 .back-button:hover {
